@@ -143,3 +143,10 @@ return count( $comments_by_type['comment'] );
 return $count;
 }
 }
+
+
+if( function_exists('acf_add_options_page') ) {
+    
+    acf_add_options_page();
+    
+}
