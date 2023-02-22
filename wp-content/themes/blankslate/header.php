@@ -10,10 +10,12 @@
 <?php wp_body_open(); ?>
 <div id="wrapper" class="hfeed">
 <header id="header" role="banner">
+
 <div id="header-cta"><div class="cta-banner">
     <a href="<?php the_field('sticky_header_link', 'option'); ?>">
     <?php the_field('sticky_header_call_to_action', 'option'); ?>
 </a></div></div>
+
 <div id="branding">
 <div class="header-logo">
 

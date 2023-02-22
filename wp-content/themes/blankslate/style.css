@@ -8,3 +8,165 @@ License: GNU General Public License v3 or Later
 License URI: https://www.gnu.org/licenses/gpl.html
 Text Domain: 3S-Blank-Slate
 */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;400;700;900&display=swap');
+
+* {
+    font-family: 'Noto Sans', sans-serif !important;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease !important;
+}
+
+body {
+    margin: 0;
+}
+
+div#wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc(100vh - 50px);
+}
+
+.cta-banner {
+    background-color: #2c3e4f;
+    text-align: center;
+}
+
+.cta-banner a {
+    color: white;
+    text-decoration: initial;
+    display: block;
+    padding: 1rem;
+}
+
+.cta-banner:hover {
+    background-color: black;
+}
+
+.header-logo img {
+    max-width: 300px;
+    width: 80%;
+    margin: auto;
+}
+
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+}
+
+.menu ul li {
+    flex: 1 1 300px;
+    text-align: center;
+    box-shadow: 1px 3px 5px rgb(0 0 0 / 10%);
+}
+
+.menu ul li:hover {
+    transform: translateY(-5px);
+    box-shadow: 1px 3px 5px rgb(0 0 0 / 30%);
+}
+
+.menu ul li a {
+    display: block;
+    padding: 1rem;
+}
+
+
+main#content {
+    display: flex;
+    gap: 1rem;
+}
+
+.main-image img {
+    width: 100%;
+}
+
+.main-image {
+    flex: 2;
+}
+
+.main-text {
+    flex: 3;
+}
+
+#branding,
+#menu,
+#container {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 0 1rem;
+}
+
+#footer {
+    text-align: center;
+    padding: 1rem;
+}
+
+
+.review-block h4,
+.review-block p {
+    margin: 0 .5rem 0 0;
+    display: inline-block;
+}
+
+.name-date h4 {
+    border-right: 1px solid black;
+    padding-right: .5rem;
+}
+
+.review-block {
+    padding-bottom: .5rem;
+    border-bottom: 1px solid;
+    margin-bottom: 1em;
+}
+
+#main-form form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+#main-form form input,
+#main-form form textarea {
+    padding: .5rem;
+}
+
+@media (max-width: 648px) {
+    main#content {
+        flex-direction: column-reverse;
+    }
+}
+
+@media (min-width: 649px) {
+    main#content-cp {
+        display: grid;
+        grid-template-areas:
+            'topleft topleft right'
+            'bottom bottom right';
+        gap: 1rem;
+    }
+
+    .main-text-cp {
+        grid-area: topleft;
+    }
+
+    .form-container {
+        grid-area: right;
+    }
+
+    .reveiw-container {
+        grid-area: bottom;
+        border-top: 1px solid black;
+        margin-top: 1rem;
+        padding-top: 1rem;
+    }
+
+}
