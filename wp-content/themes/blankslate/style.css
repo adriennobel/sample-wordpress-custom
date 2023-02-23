@@ -9,15 +9,16 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Text Domain: 3S-Blank-Slate
 */
 
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;400;700;900&display=swap');
 
 * {
-    font-family: 'Noto Sans', sans-serif !important;
+    font-family: 'Noto Sans', sans-serif;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     -ms-transition: all .5s ease;
     -o-transition: all .5s ease;
-    transition: all .5s ease !important;
+    transition: all .5s ease;
 }
 
 body {
@@ -60,6 +61,7 @@ div#wrapper {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row-reverse;
+    background-color: white;
 }
 
 .menu ul li {
@@ -69,15 +71,15 @@ div#wrapper {
 }
 
 .menu ul li:hover {
-    transform: translateY(-5px);
     box-shadow: 1px 3px 5px rgb(0 0 0 / 30%);
 }
 
 .menu ul li a {
     display: block;
     padding: 1rem;
+    text-decoration: initial;
+    color: black;
 }
-
 
 main#content {
     display: flex;
@@ -134,14 +136,108 @@ main#content {
     gap: .5rem;
 }
 
+.form-container {
+    padding: 1rem;
+    box-shadow: 1px 4px 8px rgb(0 0 0 / 10%);
+}
+
 #main-form form input,
 #main-form form textarea {
     padding: .5rem;
 }
 
+#main-form form input[type="submit"] {
+    border: none;
+    cursor: pointer;
+}
+
+/* FORM VALIDATION */
+
+.alert {
+    margin: 0;
+    background-color: red;
+    color: white;
+    padding: 0.25rem;
+    transform: translateY(.5rem);
+}
+
+.alert+input {
+    border: 3px solid red;
+}
+
+/* REVIEWS */
+.stars-outer {
+    font-family: FontAwesome;
+    display: inline-block;
+    position: relative;
+}
+
+.stars-outer::before {
+    content: "\f006 \f006 \f006 \f006 \f006";
+    color: #f8ce0b;
+}
+
+.stars-inner {
+    font-family: FontAwesome;
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0%;
+}
+
+.stars-inner::before {
+    content: "\f005 \f005 \f005 \f005 \f005";
+    color: #f8ce0b;
+}
+
+.respTxt+form {
+    display: none !important;
+}
+
 @media (max-width: 648px) {
     main#content {
         flex-direction: column-reverse;
+    }
+
+    #branding {
+        display: flex;
+        align-items: center;
+    }
+
+    .header-logo {
+        flex: 1;
+    }
+
+    .hanburger i {
+        font-size: 1.75rem;
+        padding: .5rem;
+        cursor: pointer;
+    }
+
+    .hanburger {
+        box-shadow: 1px 3px 5px rgb(0 0 0 / 20%);
+    }
+
+    #menu {
+        display: none;
+    }
+
+    input#nav-control {
+        position: absolute;
+        top: -10px;
+    }
+
+    #nav-control:checked+#menu {
+        position: absolute;
+        display: block;
+        right: 0;
+        top: 10.5rem;
+    }
+
+    .reveiw-container {
+        margin-top: 4rem;
     }
 }
 
@@ -152,6 +248,15 @@ main#content {
             'topleft topleft right'
             'bottom bottom right';
         gap: 1rem;
+    }
+
+    .hanburger,
+    #nav-control {
+        display: none;
+    }
+
+    .menu ul li:hover {
+        transform: translateY(-5px);
     }
 
     .main-text-cp {

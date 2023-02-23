@@ -19,92 +19,98 @@ get_header(); ?>
 
     <div id="main-form" class="">
 
-        <?php 
-        $emailErr = $phonenumberErr = $zipcodeErr = "";
-        $email = $phonenumber = $zipcode = "";
+        <?php
+        if ($_SERVER['REQUEST_METHOD']=='POST') {
+            if ( $form_complete == false ) {
+                $fullname = $_POST['fullname'];
+                $email = $_POST['email'];
+                $phonenumber = $_POST['phonenumber'];
+                $straddress = $_POST['straddress'];
+                $zipcode = $_POST['zipcode'];
+                $comments = $_POST['comments'];
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (empty($_POST["email"])) {
-                $emailErr = "Please provide your email";
+                $form_complete = true;
             } else {
-                $email = test_input($_POST["email"]);
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $emailErr = "Enter a valid email";
-                }
-            }
-
-            if (empty($_POST["phonenumber"])) {
-                $phonenumberErr = "Please provide a phone number";
-            } else {
-                $phonenumber = test_input($_POST["phonenumber"]);
-
-                $numbersOnly = preg_replace(`/[^0-9]/`, "", $phonenumber);
-                $numbersOnly = preg_replace(`/^1/`, "", $numbersOnly);
-                if (strlen($numbersOnly) !== 10) {
-                    $phonenumberErr = "Please provide a valid phone number";
-                }
+                echo "<script>console.log(" . json_encode($_POST) . ");</script>";
+                $hidden_class = "hidden";
+                echo "<p class='respTxt'>" . get_field('form_submitted_text') . "</p>"; 
             }
         }
-
         ?>
 
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <input type="text" name="fullname" placeholder="* Full Name">
-        <input type="email" name="email" placeholder="* Email">
-        <span class="err-mes"><?php echo $emailErr; ?></span>
-        <input type="number" name="phonenumber" placeholder="* Phone Number">
-        <span class="err-mes"><?php echo $phonenumberErr; ?></span>
-        <input type="text" name="straddress" placeholder="* Street Address (123 Main St.)">
-        <input type="number" name="zipcode" placeholder="* Zip Code">
-        <textarea name="comments" rows="5" placeholder="Tell Us What You Need"></textarea>
-        <input type="submit" id="submitform" value="Get a Quote">
+        <form method="POST" name="contact" class="<?php $hidden_class; ?>">
+
+        <?php if ( isset( $_POST['fullname'] ) && empty( trim( $_POST['fullname'] ) ) ) {
+            echo "<p class='alert'>Required field</p>";
+            $form_complete = false;
+        } 
+        ?>
+        <input type="text" name="fullname" value="<?php echo $fullname; ?>" placeholder="* Full Name" required >
+
+        <?php $email_regex = ' /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i';
+            if ( isset( $_POST['email'] ) && empty( trim( $_POST['email'] ) ) ) {
+            echo "<p class='alert'>Required field</p>";
+            $form_complete = false;
+        } else if ( isset( $_POST['email'] ) && ! preg_match( $email_regex, $_POST['email'] )) {
+            echo "<p class='alert'>Enter a valid email address.</p>";
+            $form_complete = false;
+        } 
+        ?>
+        <input type="email" name="email" value="<?php echo $email; ?>" placeholder="* Email" required >
+
+        <?php $phone_regex = '/^([0-9]{10})$/'; 
+            if ( isset( $_POST['phonenumber'] ) && empty( trim( $_POST['phonenumber'] ) ) ) {
+            echo "<p class='alert'>Required field</p>";
+            $form_complete = false;
+        } else if ( isset( $_POST['phonenumber'] ) && ! preg_match( $phone_regex, $_POST['phonenumber'] )) {
+            echo "<p class='alert'>Enter a valid 10-digit phone number.</p>";
+            $form_complete = false;
+        } 
+        ?>
+        <input type="number" name="phonenumber" value="<?php echo $phonenumber; ?>" placeholder="* Phone Number" required >
+
+        <input type="text" name="straddress" value="<?php echo $straddress; ?>" placeholder="* Street Address (123 Main St.)">
+        
+        <?php $zipcode_regex = '/^([0-9]{5})$/';
+            if ( isset( $_POST['zipcode'] ) && empty( trim( $_POST['zipcode'] ) ) ) {
+            echo "<p class='alert'>Required field</p>";
+            $form_complete = false;
+        } else if ( isset( $_POST['zipcode'] ) && ! preg_match( $zipcode_regex, $_POST['zipcode'] )) {
+            echo "<p class='alert'>Enter a valid zip code.</p>";
+            $form_complete = false;
+        } 
+        ?>
+        <input type="number" name="zipcode" value="<?php echo $zipcode; ?>" placeholder="* Zip Code" required >
+
+        <textarea name="comments" rows="5" value="<?php echo $comments; ?>" placeholder="Tell Us What You Need"></textarea>
+
+        <input type="submit" name="submit" value="Get a Quote"  
+        style="background-color: <?php echo get_field('form_submit_button_background'); ?>; color: <?php echo get_field('form_submit_button_text_color'); ?>">
         </form>
 
     </div>
 
-    <p class="hidden" id="respTxt"> <?php echo get_field('form_submitted_text') ?> </p>
-
 </div>
-
-<script>
-
-    let formdata = {
-        fullname: "",
-        email: "",
-        phonenumber: "",
-        comments: ""
-    };
-
-    document.querySelector('#submitform').addEventListener('click', () => {
-        formdata.fullname = document.querySelector('[name="fullname"]').value;
-        formdata.email = document.querySelector('[name="email"]').value;
-        formdata.phonenumber = document.querySelector('[name="phonenumber"]').value;
-        formdata.comments = document.querySelector('[name="comments"]').value;
-        console.log(formdata);
-
-        let form = document.querySelector('#main-form');
-        let respTxt = document.querySelector('#respTxt');
-
-        form.classList.add('hidden');
-        respTxt.classList.remove('hidden');
-    })
-</script>
 
 <div class="reveiw-container">
     
     <?php if (have_rows('review')) {
         while (have_rows('review')) : the_row();
+        $rating = get_sub_field('review_star_rating') * 20;
             echo "<div class='review-block'>
-                <p>&rquot;" . get_sub_field('review_text') . "&lquot;</p>
+                <p>\"" . get_sub_field('review_text') . "\"</p>
                 <div class='name-date'>
                     <h4>" . get_sub_field('review_name') . "</h4>
-                    <p>date</p>
+                    <p>" . date("F j, Y", strtotime("-6 days")) . "</p>
                 </div>
-                <p class='star-rating'>" . get_sub_field('review_star_rating') . "</p>
+                <div class='stars-outer'>
+                <div class='stars-inner' style='width: " . $rating . "%;'></div>
+                </div>
             </div>";
+            
         endwhile;
     }
-    ?>    
+    ?>  
 
 </div>
 

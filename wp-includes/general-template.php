@@ -1289,7 +1289,8 @@ function _wp_render_title_tag() {
 		return;
 	}
 
-	echo '<title>' . wp_get_document_title() . '</title>' . "\n";
+	// echo '<title>' . wp_get_document_title() . '</title>' . "\n";
+	echo '<title>' . get_field('meta_title') . '</title>' . "\n";
 }
 
 /**
