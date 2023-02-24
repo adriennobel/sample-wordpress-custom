@@ -2,7 +2,11 @@
 
 /* Template Name: Contactpage */
 
-get_header(); ?>
+get_header(); 
+
+$fullname_ver = $email_ver = $phone_ver = $zipcode_ver = "PASSED";
+
+?>
 
 <main id="content-cp" role="main">
 
@@ -15,78 +19,77 @@ get_header(); ?>
 
 <div class="form-container">
 
-    <h2> <?php echo get_field('form_title') ?> </h2>
+    <div class="form-header">
+        <span style="background-color: <?php echo get_field('form_submit_button_background'); ?>;"></span>
+        <h2> <?php echo get_field('form_title') ?> </h2>
+    </div>
 
     <div id="main-form" class="">
 
-        <?php
-        if ($_SERVER['REQUEST_METHOD']=='POST') {
-            if ( $form_complete == false ) {
-                $fullname = $_POST['fullname'];
-                $email = $_POST['email'];
-                $phonenumber = $_POST['phonenumber'];
-                $straddress = $_POST['straddress'];
-                $zipcode = $_POST['zipcode'];
-                $comments = $_POST['comments'];
-
-                $form_complete = true;
-            } else {
-                echo "<script>console.log(" . json_encode($_POST) . ");</script>";
-                $hidden_class = "hidden";
-                echo "<p class='respTxt'>" . get_field('form_submitted_text') . "</p>"; 
-            }
-        }
-        ?>
-
-        <form method="POST" name="contact" class="<?php $hidden_class; ?>">
+        <form method="POST" name="contact" class="<?php echo $hidden_class; ?>">
 
         <?php if ( isset( $_POST['fullname'] ) && empty( trim( $_POST['fullname'] ) ) ) {
             echo "<p class='alert'>Required field</p>";
-            $form_complete = false;
+            $fullname_ver = "FAILED";
         } 
         ?>
-        <input type="text" name="fullname" value="<?php echo $fullname; ?>" placeholder="* Full Name" required >
+        <input type="text" name="fullname" value="<?php echo $_POST['fullname']; ?>" placeholder="* Full Name" required >
 
         <?php $email_regex = ' /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i';
             if ( isset( $_POST['email'] ) && empty( trim( $_POST['email'] ) ) ) {
             echo "<p class='alert'>Required field</p>";
-            $form_complete = false;
+            $email_ver = "FAILED";
         } else if ( isset( $_POST['email'] ) && ! preg_match( $email_regex, $_POST['email'] )) {
             echo "<p class='alert'>Enter a valid email address.</p>";
-            $form_complete = false;
+            $email_ver = "FAILED";
         } 
         ?>
-        <input type="email" name="email" value="<?php echo $email; ?>" placeholder="* Email" required >
+        <input type="email" name="email" value="<?php echo $_POST['email']; ?>" placeholder="* Email" required >
 
         <?php $phone_regex = '/^([0-9]{10})$/'; 
             if ( isset( $_POST['phonenumber'] ) && empty( trim( $_POST['phonenumber'] ) ) ) {
             echo "<p class='alert'>Required field</p>";
-            $form_complete = false;
+            $phone_ver = "FAILED";
         } else if ( isset( $_POST['phonenumber'] ) && ! preg_match( $phone_regex, $_POST['phonenumber'] )) {
             echo "<p class='alert'>Enter a valid 10-digit phone number.</p>";
-            $form_complete = false;
+            $phone_ver = "FAILED";
         } 
         ?>
-        <input type="number" name="phonenumber" value="<?php echo $phonenumber; ?>" placeholder="* Phone Number" required >
+        <input type="number" name="phonenumber" value="<?php echo $_POST['phonenumber']; ?>" placeholder="* Phone Number" required >
 
-        <input type="text" name="straddress" value="<?php echo $straddress; ?>" placeholder="* Street Address (123 Main St.)">
+        <input type="text" name="straddress" value="<?php echo $_POST['straddress']; ?>" placeholder="* Street Address (123 Main St.)">
         
         <?php $zipcode_regex = '/^([0-9]{5})$/';
             if ( isset( $_POST['zipcode'] ) && empty( trim( $_POST['zipcode'] ) ) ) {
             echo "<p class='alert'>Required field</p>";
-            $form_complete = false;
+            $zipcode_ver = "FAILED";
         } else if ( isset( $_POST['zipcode'] ) && ! preg_match( $zipcode_regex, $_POST['zipcode'] )) {
             echo "<p class='alert'>Enter a valid zip code.</p>";
-            $form_complete = false;
+            $zipcode_ver = "FAILED";
         } 
         ?>
-        <input type="number" name="zipcode" value="<?php echo $zipcode; ?>" placeholder="* Zip Code" required >
+        <input type="number" name="zipcode" value="<?php echo $_POST['zipcode']; ?>" placeholder="* Zip Code" required >
 
-        <textarea name="comments" rows="5" value="<?php echo $comments; ?>" placeholder="Tell Us What You Need"></textarea>
+        <textarea name="comments" rows="5" value="<?php echo $_POST['comments']; ?>" placeholder="Tell Us What You Need"></textarea>
 
         <input type="submit" name="submit" value="Get a Quote"  
         style="background-color: <?php echo get_field('form_submit_button_background'); ?>; color: <?php echo get_field('form_submit_button_text_color'); ?>">
+
+        <input type="hidden" name="validate" value="<?php echo $email_ver; ?>">
         </form>
+
+
+        <?php
+        if ($_SERVER['REQUEST_METHOD']=='POST') {
+            if ( $fullname_ver == "PASSED" && $email_ver == "PASSED" && $phone_ver == "PASSED" && $zipcode_ver == "PASSED" ) {
+                echo "<p class='respTxt'>" . get_field('form_submitted_text') . "</p>"; 
+                echo "<script>document.querySelector('form[name=\"contact\"]').classList.add('hidden');</script>";
+                echo "<script>console.log(" . json_encode($_POST) . ");</script>";
+            }
+        }
+        ?>
+
+        <?php echo "<script>console.log('name: " . $fullname_ver . " email: " . $email_ver . " phone: " . $phone_ver . " zip: " . $zipcode_ver . "');</script>"; ?>
 
     </div>
 
