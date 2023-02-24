@@ -265,14 +265,14 @@ main#content {
 
     input#nav-control {
         position: absolute;
-        top: -10px;
+        top: -20px;
     }
 
     #nav-control:checked+#menu {
         position: absolute;
         display: block;
         right: 0;
-        top: 1010px;
+        top: 150px;
     }
 
     .reveiw-container {
